@@ -2,7 +2,7 @@
 
 Our model design boils down to three layers of abstraction. The first layer, which is intended for client use, is the model. The model has-a manager object. The manager has-a image object. In each layer of abstraction, we aimed to keep functions short, choosing to delegate to other layers if possible. Every field in our design is private to ensure encapsulation.
 
-MODEL:
+\b MODEL:
 Our model interface is called IPModel (IP stands for Image Processing). It contains the methods specified in the assignment as well as some methods we felt were useful and should be included in every model. The implementation of this interface is SimpleIPModel. The SimpleIPModel has one field, the manager. The manager holds an image and keeps track of relevant information about the state of the manager (i.e. whether an image exists in the manager, name of the image, etc). The methods within SimpleIPModel are very straightforward and only have one purpose.
 
 MANAGER:
