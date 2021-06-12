@@ -3,16 +3,16 @@
 Our model design boils down to three layers of abstraction. The first layer, which is intended for client use, is the model. The model has-a manager object. The manager has-a image object. In each layer of abstraction, we aimed to keep functions short, choosing to delegate to other layers if possible. Every field in our design is private to ensure encapsulation.
 
 ## MODEL
-Our model interface is called IPModel (IP stands for Image Processing). This interface extends our IPModelState, which acts as a ViewModel. IPModelState does not contain any methods that modify the model and it was created in antipation for the View. On the other hand, IPModel contains methods that mutate the model and were explicitly specified in the assignment. The implementation of IPModel is SimpleIPModel. The SimpleIPModel has one field, the manager. The manager holds an image and keeps track of relevant information about the state of the manager (i.e. whether an image exists in the manager, name of the image, etc). The methods within SimpleIPModel are very straightforward and only have one purpose.
+Our model interface is called IPModel (IP stands for Image Processing). This interface extends our IPModelState, which acts as a ViewModel. IPModelState does not contain any methods that modify the model and it was created in anticipation of the View. On the other hand, IPModel contains methods that mutate the model and were explicitly specified in the assignment. The implementation of IPModel is SimpleIPModel. The SimpleIPModel has one field, the manager. The manager holds an image and keeps track of relevant information about the state of the manager (i.e. whether an image exists in the manager, name of the image, etc). The methods within SimpleIPModel are very straightforward and only have one purpose.
 
 ## MANAGER
-The manager delegate is the most powerful class in our model implementation, hence why we decided to not give the client direct access. The manager interface is called IPManager. The IPManager contains methods that mutate the state of the manager. The methods in this interface are abstracted and heavily rely upon function objects to allow for easy extension. The majority of exceptions are thrown by the manager to allow for simplistic functions in the model. The implemention of this interface is SimpleIPManager. The SimpleIPManager only holds one image at a time. It also contains a boolean flag, indicating whether an image exists in the manager. Finally, it contains a String representation of the image currently in the manager, which may be changed. 
+The manager delegate is the most powerful class in our model implementation, hence why we decided to not give the client direct access. The manager interface is called IPManager. The IPManager contains methods that mutate the state of the manager. The methods in this interface are abstracted and heavily rely upon function objects to allow for easy extension. The majority of exceptions are thrown by the manager to allow for simplistic functions in the model. The implementation of this interface is SimpleIPManager. The SimpleIPManager only holds one image at a time. It also contains a boolean flag, indicating whether an image exists in the manager. Finally, it contains a String representation of the image currently in the manager, which may be changed. 
 
 ## IMAGE REPRESENTATION
-We decided to call our representation of an image BitmapImage after the bits used in images. This class implements the ImageRepresentation interface, which included functions that directly modify an image and reveal characteristics about an image. The BitmapImage has a pixelMap (named after PPM files) which is a 2D ArrayList of pixels. Each BitmapImage also has a height, width, and maximum value for RGB components. 
+We decided to call our representation of an image BitmapImage after the bits used in images. This class implements the ImageRepresentation interface, which includes functions that directly modify an image and reveal characteristics about an image. The BitmapImage has a pixelMap (named after PPM files) which is a 2D ArrayList of pixels. Each BitmapImage also has a height, width, and maximum value for RGB components. 
 
 ### PIXEL
-Pixel is our class to represent a pixel in space. Each pixel contains an x and y coordinate and a color. All fields, except for color, are final to ensure invariants. 
+Pixel is our class to represent a pixel in space. Each pixel contains an x and y coordinate and a color. All fields, except for color, are final to ensure invariance. 
 
 ## FUNCTION OBJECTS 
 We decided upon the use of function objects for abstraction purposes. We had four different types of function interfaces, one for each type of operation we had to support.
@@ -26,6 +26,6 @@ In the PixelCreator package, we have the CreatePixelInterface. This interface re
 ## MISC.
 We have a factory class (ImageRepresentationCreator) that creates an instance of an ImageRepresentation depending on the enum passed into the static method. We also have a Utils class that contains some functions that we continuously reused across several classes.
 
-BOTH IMAGES USED IN THIS PROJECT IS OWNED BY ANIA MISIOREK. I AUTHORIZE THE USE OF MY IMAGES FOR THIS PROJECT.
+BOTH IMAGES USED IN THIS PROJECT ARE OWNED BY ANIA MISIOREK. I AUTHORIZE THE USE OF MY IMAGES FOR THIS PROJECT.
 
 
