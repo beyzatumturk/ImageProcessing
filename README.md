@@ -1,7 +1,5 @@
 # Assignment 6
 
-A README file in the root submission folder (that contains src, test, and res). The README file should document which parts of the program are complete, and design changes and justifications.
-
 # Overview
 
 Our program is a simple image processing application. Using our program, a user can import photos, manipulate photos, and export photos.
