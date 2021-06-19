@@ -1,31 +1,59 @@
-# Assignment 5
+# Assignment 6
 
-Our model design boils down to three layers of abstraction. The first layer, which is intended for client use, is the model. The model has-a manager object. The manager has-a image object. In each layer of abstraction, we aimed to keep functions short, choosing to delegate to other layers if possible. Every field in our design is private to ensure encapsulation.
+A README file in the root submission folder (that contains src, test, and res). The README file should document which parts of the program are complete, and design changes and justifications.
+
+# OVERVIEW
+
+Our program is a simple image processing application. Using our program, a user can import photos, manipulate photos, and export photos.
+
+# FEATURES
+
+All the features listed below are completed.
+
+## LAYERING
+The user can layer images and stack them on top of one another. Layers can be deleted, set to visible and invisible, copied, and exported as a collection of files. 
+
+## SINGLE IMAGE PROCESSING
+The user can individually manipulate images in layers. To manipulate the image in a layer, the user can set a layer as the "current". When a layer is made current, the user can blur and sharpen the image, and apply a sepia and monochrome color transformation. The user also has the option to create an image into this current layer. Images that can be created include checkerboards and rainbows.
+
+## IMPORTING AND EXPORTING
+The user can load images into a layer from a file. Image file types that are currently supported include ppm, jpeg, and png. All other image types cannot be read by our program. The user also has the option to upload an entire layered image by passing in a txt file that contains the locations of all the layers. The user has the option to export a single image (the topmost visible layer of a layered image) or export the entire layered image (visible layers only) into a collection of files. The user can choose to export images into a ppm, jpeg, or png file.
+
+## SCRIPTING
+To run our program, the user has the option to either upload a .txt file that contains the script, or interactively input instructions. After each instruction, the program will either return feedback of how the model has changed or if the user input was not valid.
+
+# DESIGN
+
+We based our design on the MVC design pattern. As per the architecture, the model handles all image data, the controller handles user input and I/O, and the view displays feedback to the user. A brief overview of completion and design changes is included below. 
 
 ## MODEL
-Our model interface is called IPModel (IP stands for Image Processing). This interface extends our IPModelState, which acts as a ViewModel. IPModelState does not contain any methods that modify the model and it was created in anticipation of the View. On the other hand, IPModel contains methods that mutate the model and were explicitly specified in the assignment. The implementation of IPModel is SimpleIPModel. The SimpleIPModel has one field, the manager. The manager holds an image and keeps track of relevant information about the state of the manager (i.e. whether an image exists in the manager, name of the image, etc). The methods within SimpleIPModel are very straightforward and only have one purpose.
+The model used by this program was the SimpleIPLayerModel. This model implemented the IPLayerModel, which extended the old IPModel. The IPLayerModel includes extra functionality that supports layering. The SimpleIPLayerModel also extends the SimpleIPModel, which only supported operations to modify one image. The functionality (and delegate) from SimpleIPModel is used to modify the "current layer". The SimpleIPLayerModel contains a List of IPManagers, which represent layers in an image. It also has a List of booleans that represent the layers' visibility. The pictureManager which was inherited from SimpleIPModel represents the "current layer". SimpleIPLayerModel contains a boolean flag that represents whether pictureManager is currently pointing to a layer, or if nothing is set to the "current layer". Finally, each SimpleIPLayerModel is initialized with a canvas width and canvas height which is used to ensure that all layers are the same size.
 
-## MANAGER
-The manager delegate is the most powerful class in our model implementation, hence why we decided to not give the client direct access. The manager interface is called IPManager. The IPManager contains methods that mutate the state of the manager. The methods in this interface are abstracted and heavily rely upon function objects to allow for easy extension. The majority of exceptions are thrown by the manager to allow for simplistic functions in the model. The implementation of this interface is SimpleIPManager. The SimpleIPManager only holds one image at a time. It also contains a boolean flag, indicating whether an image exists in the manager. Finally, it contains a String representation of the image currently in the manager, which may be changed. 
+*Design change: We originally had our model handle IO (allowed for importing and exporting images), but this was taken out of IPModel after learning that model should not handle IO at all).*
 
-## IMAGE REPRESENTATION
-We decided to call our representation of an image BitmapImage after the bits used in images. This class implements the ImageRepresentation interface, which includes functions that directly modify an image and reveal characteristics about an image. The BitmapImage has a pixelMap (named after PPM files) which is a 2D ArrayList of pixels. Each BitmapImage also has a height, width, and maximum value for RGB components. 
+### IPMANAGER
+*Design change: We originally had our IPManager handle IO (allowed for importing and exporting images), but this was taken out since the model would not be using IO. Instead, we made a FileManager that handles IO.*
 
-### PIXEL
-Pixel is our class to represent a pixel in space. Each pixel contains an x and y coordinate and a color. All fields, except for color, are final to ensure invariance. 
+### IMAGE REPRESENTATION
+*Design change: Added cropping feature to the interface since we felt it would be a waste of memory to create an entirely new interface and new class just for this one method*
 
-## FUNCTION OBJECTS 
-We decided upon the use of function objects for abstraction purposes. We had four different types of function interfaces, one for each type of operation we had to support.
+### FUNCTION OBJECTS 
+*Design change: Moved the Filetype interface and function objects to the controller package since they handle IO.*
 
-In the Effects package, we have two function interfaces that directly manipulate images. The two interfaces, FilterEffect and ColorTransformationEffect, each have one method, getKernel(), which returns the 2D ArrayList(or matrix) provided in the assignment. We decided to separate the two functions since kernel size can vary in the filter, but not in the color transformation. For FilterEffect, Blur and Sharpen implement the interface and method. For ColorTransformation, Sepia and Monochrome implement the interface and method.
+### MISC.
+*Design change: Throughout our program, we initialized ArrayLists as ArrayList<>. We went back into our program and changed them all to List<>.*
 
-In the FileType package, we have the Filetype interface, which is intended to represent a different file type (i.e. PPM, JPG, PNG). There are two methods in the Filetype interface, import and export. Import will import a file of that type into an image representation, while export will export the image representation into the file type. The only class that implements this interface is PPMFile, as it is the only file type that is supported currently.
+## CONTROLLER
+The controller used by this program is the SimpleIPLayerController. This controller uses a command design pattern to read a script. The script may either be put in interactively or read from a file. Depending on the input, the controller will delegate to a function object that represents a command. This class extends the AbstractIPController, which was included to support a program that may not support layering. The commands included in AbstractIPController are exclusive to the original IPModel.
 
-In the PixelCreator package, we have the CreatePixelInterface. This interface represents the types of images that can be created programmatically. The only method is createImage, which returns a pixelMap that represents the image. CreateCheckerBoard and CreateRainbow implement this interface. As their names suggest, CreateCheckerBoard creates a checkerboard image and CreateRainbow creates a rainbow image.
+### FILEMANAGER
+*Design change: Following the feedback that we should not include I/O in the model, we created a FileManager that supports operations for file importing and exporting.* The commands that require importing and exporting files will contain a FileManager. This FileManager will determine filetypes from user input and accordingly import and export files of this type.
 
-## MISC.
-We have a factory class (ImageRepresentationCreator) that creates an instance of an ImageRepresentation depending on the enum passed into the static method. We also have a Utils class that contains some functions that we continuously reused across several classes.
+### FILECREATOR
+The FileCreator is a class that creates File objects and FileOutputStreams since our export only takes in an OutputStream. This class was created to simplify exporting and handle exceptions related to creating a file.
 
-BOTH IMAGES USED IN THIS PROJECT ARE OWNED BY ANIA MISIOREK. I AUTHORIZE THE USE OF MY IMAGES FOR THIS PROJECT.
+## VIEW
+The view is the only aspect of our program that is partially completed. The view used by our program is the SimpleIPTextView, which implements the IPView. The IPView contains two methods, updateMessage and updateModel. At present, the SimpleIPTextView only uses updateMessage, as we did not change anything in the view when the model changed. However, to accommodate for future views that require notification of when the model changes, we included the updateModel.
 
-
+## ASSUMPTIONS
+We assumed that the user will only want to use the SimpleIPLayerModel, as opposed to the SimpleIPLayer model. Since the assignment specified that the script should contain all the working commands so far, we used the most advanced model. We also assumed that once a model is made in the program, the user cannot override this model to create a new one. In other words, one model per program.
