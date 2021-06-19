@@ -22,7 +22,7 @@ The user can load images into a layer from a file. Image file types that are cur
 ## Scripting
 To run our program, the user has the option to either upload a .txt file that contains the script, or interactively input instructions. After each instruction, the program will either return feedback of how the model has changed or if the user input was not valid.
 
-# Desing
+# Design
 
 We based our design on the MVC design pattern. As per the architecture, the model handles all image data, the controller handles user input and I/O, and the view displays feedback to the user. A brief overview of completion and design changes is included below. 
 
@@ -55,5 +55,5 @@ The FileCreator is a class that creates File objects and FileOutputStreams since
 ## View
 The view is the only aspect of our program that is partially completed. The view used by our program is the SimpleIPTextView, which implements the IPView. The IPView contains two methods, updateMessage and updateModel. At present, the SimpleIPTextView only uses updateMessage, as we did not change anything in the view when the model changed. However, to accommodate for future views that require notification of when the model changes, we included the updateModel.
 
-## Assumptions
+# Assumptions
 We assumed that the user will only want to use the SimpleIPLayerModel, as opposed to the SimpleIPLayer model. Since the assignment specified that the script should contain all the working commands so far, we used the most advanced model. We also assumed that once a model is made in the program, the user cannot override this model to create a new one. In other words, one model per program.
