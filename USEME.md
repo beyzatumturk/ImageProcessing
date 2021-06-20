@@ -2,6 +2,7 @@
 This USEME includes information on how to run the JAR file, a complete list of functions supported by our program, and example runs.
 
 ## How to Use the Program
+To run the jar file, the user should open up the terminal and open the jar file using java -jar NameOfJARFile.jar. The files included in /res are necessary to run the scripts for this jar. To run the jar interactively, the user should begin by typing "make" followed by two integers that represent the canvas of the layered image. If the uder decides to do this command, they will be unable to upload a script. If the user want to upload a script and have commands read from this script, they should type "read" followed by the file name. The two example script files are named script1.txt and script2.txt. To run the jar, these scripts and their supplementary material (one.jpeg, three.png, Sunset.ppm, shirt.ppm) must exist in the same folder.
 
 ## Script Commands
 ### Initial Commands (must be used in order to start the program)
